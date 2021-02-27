@@ -2,6 +2,7 @@ from statistics import median
 from math import sin, cos
 from copy import deepcopy
 import random
+import numpy as np
 
 ########
 # Print an image of integer pixels
@@ -268,18 +269,16 @@ def hitAndMiss(imIn,ker):
 ########
 # GenImage - generates an numpy array with a random image
 ################
-def genImage(dim,max):
-# Falta fazer o seed
-    s=''
-    listV=[]
-    for i in range(dim):
-        lin=[]
-        for j in range(dim):
-            v=random.randint(0,max)
-            s +="{0:5d}".format(v)
-            lin +=[v]
-        s +='\n'
-        listV +=[lin]
-    return(s,listV)
+def genImage(dimX,dimY,max,seed=0):
+    ''' Generates a numpy array with dimX by dimY pixels of type int
+    Fill the array with values between zero and max
+    '''
+    if seed!=0:
+        random.seed(seed)
+    img=np.empty((dimY,dimX),int)
+    for x in range(dimX):
+        for y in range(dimY):
+            img[y,x]=random.randint(0,max)
+    return(img)
 
 
