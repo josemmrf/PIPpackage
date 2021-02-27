@@ -23,30 +23,6 @@ def printImgFloat(img):
         print()
 
 ########
-# Pad an image (1,1,1,1) duplicated
-################
-def imagePadDup1(image):
-    res = []
-    for i in range(len(image)):
-        res.append([image[i][0]] + image[i] + [image[i][-1]])
-    res.insert(0, res[0])
-    res.insert(-1, res[-1])
-    return (res)
-
-########
-# Pad an image (2,2,2,2) duplicated
-################
-def imagePadDup2(image):
-    res = []
-    for i in range(len(image)):
-        res.append([image[i][0]] + [image[i][0]] + image[i] + [image[i][-1]] + [image[i][-1]])
-    res.insert(0, res[0])
-    res.insert(0, res[0])
-    res.insert(-1, res[-1])
-    res.insert(-1, res[-1])
-    return (res)
-
-########
 # Convolute a padded image with a 3x3 kernel
 ################
 def imgC3x3(img, ker):
@@ -282,7 +258,7 @@ def genImage(dimX,dimY,max,seed=0):
     return(img)
 
 ########
-# imagePad - padds an image an arbitrary number of lines and columns
+# imagePad - padding an image an arbitrary number of lines and columns
 ################
 def imagePad(image,padding,mode='edge'):
     ''' imagePad - padding an image
