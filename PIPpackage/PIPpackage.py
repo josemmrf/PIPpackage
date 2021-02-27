@@ -8,13 +8,6 @@ import math
 from copy import deepcopy
 from shutil import copyfile
 
-filesPath='/Users/josefonseca/PycharmProjects/exame'
-examsPath='/Users/josefonseca/PycharmProjects/exame/Exams'
-solutionsPath='/Users/josefonseca/PycharmProjects/exame/Solutions'
-
-from checkEmail import checkEmail
-from checkEmail import loginEmail
-
 #########
 # Image processing functions
 #################
