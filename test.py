@@ -16,19 +16,6 @@ def randof(list):
     i=random.randint(0,len(list)-1)
     return([list[i]])
 
-def genImage(dim,max):
-    s=''
-    listV=[]
-    for i in range(dim):
-        lin=[]
-        for j in range(dim):
-            v=random.randint(0,max)
-            s +="{0:5d}".format(v)
-            lin +=[v]
-        s +='\n'
-        listV +=[lin]
-    return(s,listV)
-
 def genVals(studentNumb):
     random.seed(studentNumb)
     vals=[]
