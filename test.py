@@ -180,5 +180,8 @@ import PIPpackage
 # mail = loginEmail('ssfctunl@gmail.com', 'Sensoriais2020')  # 'simfctunl@gmail.com', 'sim576911')
 # checkEmail(mail)
 
-im=PIPpackage.genImage(10,5,15)
+im=PIPpackage.genImage(7,7,8)
 print(im)
+print()
+imD=PIPpackage.imagePad(im,[2,2,2,2],mode='wrap')
+print(imD)

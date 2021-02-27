@@ -271,7 +271,7 @@ def hitAndMiss(imIn,ker):
 ################
 def genImage(dimX,dimY,max,seed=0):
     ''' Generates a numpy array with dimX by dimY pixels of type int
-    Fill the array with values between zero and max
+    - returns the array filled with values between zero and max
     '''
     if seed!=0:
         random.seed(seed)
@@ -281,4 +281,18 @@ def genImage(dimX,dimY,max,seed=0):
             img[y,x]=random.randint(0,max)
     return(img)
 
-
+########
+# imagePad - padds an image an arbitrary number of lines and columns
+################
+def imagePad(image,padding,mode='edge'):
+    ''' imagePad - padding an image
+    :param image: NumPy array with the image
+    :param padding: list of padding values - yUp, yDown, xLeft, xRight
+    :param mode: it can be ‘edge’ (default), ‘symmetric’, 'wrap', 'constant' (padding with zeros)
+    :return: NumPy array with padded image
+    '''
+    yu=padding[2]
+    yd=padding[3]
+    xl=padding[0]
+    xr=padding[1]
+    return(np.pad(image, ((yu, yd), (xl, xr)), mode))
