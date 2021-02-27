@@ -1,17 +1,6 @@
-import os
-import random
-import io
-import sys
-import pandas as pd
-import statistics
-import math
+from statistics import median
+from math import sin, cos
 from copy import deepcopy
-from shutil import copyfile
-
-#########
-# Image processing functions
-#################
-from math import *
 
 ########
 # Print an image of integer pixels
@@ -165,10 +154,10 @@ def medianHibrid5x5(x, y, image,prt):
     print('pixeis nas diagonais', l1)
     l2 = getValues(x + 2, y + 2, cross, img)
     print('pixeis nas verticais', l2)
-    v1 = statistics.median(l1)
+    v1 = median(l1)
 
-    v2 = statistics.median(l2)
-    res = statistics.median([v1, v2, image[y][x]])
+    v2 = median(l2)
+    res = median([v1, v2, image[y][x]])
     print('mediana dos pixeis nas diagonais', v1)
     print('mediana dos pixeis nas verticais', v2)
     print('pixel central', image[y][x])
