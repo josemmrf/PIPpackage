@@ -4,6 +4,68 @@ from copy import deepcopy
 import random
 import numpy as np
 
+# ADAPTED FUNCTIONS
+
+########
+# GenImage - generates an numpy array with a random image
+################
+def genImage(dimX,dimY,max,seed=0):
+    ''' Generates a numpy array with dimX by dimY pixels of type int
+    - returns the array filled with values between zero and max
+    '''
+    if seed!=0:
+        random.seed(seed)
+    img=np.empty((dimY,dimX),int)
+    for x in range(dimX):
+        for y in range(dimY):
+            img[y,x]=random.randint(0,max)
+    return(img)
+
+########
+# imagePad - padding an image an arbitrary number of lines and columns
+################
+def imagePad(image,padding,mode='edge'):
+    ''' imagePad - padding an image
+    :param image: NumPy array with the image
+    :param padding: list of padding values - yUp, yDown, xLeft, xRight
+    :param mode: it can be ‘edge’ (default), ‘symmetric’, 'wrap', 'constant' (padding with zeros)
+    :return: NumPy array with padded image
+    '''
+    yu=padding[2]
+    yd=padding[3]
+    xl=padding[0]
+    xr=padding[1]
+    return(np.pad(image, ((yu, yd), (xl, xr)), mode))
+
+########
+# Print an image of integer pixels
+################
+def printImg(img):
+    '''
+    printImg - printing an INTEGER image on the screen
+    :param img: NumPy array with the image to print
+    :return: none
+    '''
+    for l in img:
+        for p in l:
+            print('{0:3d}'.format(p), end='')
+        print()
+
+########
+# Print an image of float pixels
+################
+def printImgFloat(img):
+    '''
+    printImgFloat - printing a FLOAT image on the screen
+    :param img: NumPy array with the image to print
+    :return: none
+    '''
+    for l in img:
+        for p in l:
+            print('{:5.2f}'.format(p), end='')
+        print()
+
+# TO BE ADAPTED FUNCTIONS
 #######
 # Convolute a padded image with a 3x3 kernel
 ################
@@ -223,62 +285,3 @@ def hitAndMiss(imIn,ker):
                         s=0
             imRes[-1].append(s)
     return(imRes)
-
-########
-# GenImage - generates an numpy array with a random image
-################
-def genImage(dimX,dimY,max,seed=0):
-    ''' Generates a numpy array with dimX by dimY pixels of type int
-    - returns the array filled with values between zero and max
-    '''
-    if seed!=0:
-        random.seed(seed)
-    img=np.empty((dimY,dimX),int)
-    for x in range(dimX):
-        for y in range(dimY):
-            img[y,x]=random.randint(0,max)
-    return(img)
-
-########
-# imagePad - padding an image an arbitrary number of lines and columns
-################
-def imagePad(image,padding,mode='edge'):
-    ''' imagePad - padding an image
-    :param image: NumPy array with the image
-    :param padding: list of padding values - yUp, yDown, xLeft, xRight
-    :param mode: it can be ‘edge’ (default), ‘symmetric’, 'wrap', 'constant' (padding with zeros)
-    :return: NumPy array with padded image
-    '''
-    yu=padding[2]
-    yd=padding[3]
-    xl=padding[0]
-    xr=padding[1]
-    return(np.pad(image, ((yu, yd), (xl, xr)), mode))
-
-########
-# Print an image of integer pixels
-################
-def printImg(img):
-    '''
-    printImg - printing an INTEGER image on the screen
-    :param img: NumPy array with the image to print
-    :return: none
-    '''
-    for l in img:
-        for p in l:
-            print('{0:3d}'.format(p), end='')
-        print()
-
-########
-# Print an image of float pixels
-################
-def printImgFloat(img):
-    '''
-    printImgFloat - printing a FLOAT image on the screen
-    :param img: NumPy array with the image to print
-    :return: none
-    '''
-    for l in img:
-        for p in l:
-            print('{:5.2f}'.format(p), end='')
-        print()
