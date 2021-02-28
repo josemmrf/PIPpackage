@@ -4,24 +4,6 @@ from copy import deepcopy
 import random
 import numpy as np
 
-########
-# Print an image of integer pixels
-################
-def printImg(img):
-    for l in img:
-        for p in l:
-            print('{0:3d}'.format(p), end='')
-        print()
-
-########
-# Print an image of float pixels
-################
-def printImgFloat(img):
-    for l in img:
-        for p in l:
-            print('{:5.2f}'.format(p), end='')
-        print()
-
 #######
 # Convolute a padded image with a 3x3 kernel
 ################
@@ -272,3 +254,31 @@ def imagePad(image,padding,mode='edge'):
     xl=padding[0]
     xr=padding[1]
     return(np.pad(image, ((yu, yd), (xl, xr)), mode))
+
+########
+# Print an image of integer pixels
+################
+def printImg(img):
+    '''
+    printImg - printing an INTEGER image on the screen
+    :param img: NumPy array with the image to print
+    :return: none
+    '''
+    for l in img:
+        for p in l:
+            print('{0:3d}'.format(p), end='')
+        print()
+
+########
+# Print an image of float pixels
+################
+def printImgFloat(img):
+    '''
+    printImgFloat - printing a FLOAT image on the screen
+    :param img: NumPy array with the image to print
+    :return: none
+    '''
+    for l in img:
+        for p in l:
+            print('{:5.2f}'.format(p), end='')
+        print()
