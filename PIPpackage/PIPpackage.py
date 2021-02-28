@@ -10,7 +10,7 @@ import numpy as np
 def printImg(img):
     for l in img:
         for p in l:
-            print('{0:6d}'.format(p), end='')
+            print('{0:3d}'.format(p), end='')
         print()
 
 ########
@@ -19,10 +19,10 @@ def printImg(img):
 def printImgFloat(img):
     for l in img:
         for p in l:
-            print('{:8.2f}'.format(p), end='')
+            print('{:5.2f}'.format(p), end='')
         print()
 
-########
+#######
 # Convolute a padded image with a 3x3 kernel
 ################
 def imgC3x3(img, ker):

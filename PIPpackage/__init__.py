@@ -1,1 +1,1 @@
-from PIPpackage.PIPpackage import bilinear,medianHibrid5x5,genImage,imagePad
+from PIPpackage.PIPpackage import genImage,imagePad,printImg
