@@ -195,8 +195,12 @@ PIPpackage.printImg(img)
 
 #imgRes=PIPpackage.sepFilter([1,2,1,1,1],[1,2,1],img)
 
-res=PIPpackage.bilinear(1.6, 2.8, img,True)
-print('Bilinear interpolation result:', res)
+# res=PIPpackage.bilinear(1.6, 2.8, img,True)
+#print('Bilinear interpolation result:', res)
+
+res=PIPpackage.medianHibrid5x5(4,5,img,True)
+
+
 #import matplotlib.pyplot as pyplot
 #pyplot.imshow(img)
 #pyplot.show()

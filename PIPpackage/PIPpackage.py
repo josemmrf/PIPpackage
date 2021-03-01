@@ -197,20 +197,28 @@ def bilinear(xorig, yorig, img, verb=False):
     return (int(round(res,0)))
 
 ########
-# Bilinear interpolation
+# Hybrid 5x5 median filter value for a pixel
 ################
-def medianHibrid5x5(x, y, image,prt):
+def medianHibrid5x5(x, y, image,verb=False):
+    '''
+    Hybrid median filter
+    :param x: X coordinate
+    :param y: Y coordinate
+    :param image: image to be filtered
+    :param prt:
+    :return:
+    '''
     diag = [[-2, -2], [-1, -1], [0, 0], [1, 1], [2, 2], [2, -2], [1, -1], [-1, 1], [-2, 2]]
     cross = [[0, -2], [0, -1], [0, 0], [0, 1], [0, 2], [-2, 0], [-1, 0], [1, 0], [2, 0]]
 
     def getValues(x, y, off, img):
-        l = []
+        l = np.empty([len(off)])
         for i in range(len(off)):
-            l.append(img[y + off[i][1]][x + off[i][0]])
+            l[i]=img[y + off[i][1]][x + off[i][0]]
         return (l)
 
-    img = imagePadDup2(image)
-    if prt:
+    img = imagePad(image,[2,2,2,2])
+    if verb:
         print('Imagem com duplicacao das margens(2)\n')
         printImg(img)
         print()
