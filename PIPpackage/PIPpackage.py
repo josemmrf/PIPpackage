@@ -20,7 +20,7 @@ def genImage(dimX,dimY,max,seed=0):
     for x in range(dimX):
         for y in range(dimY):
             img[y,x]=random.randint(0,max)
-    return(img)
+    return img
 
 ########
 # imagePad - padding an image an arbitrary number of lines and columns
@@ -36,7 +36,7 @@ def imagePad(image,padding,mode='edge'):
     yd=padding[3]
     xl=padding[0]
     xr=padding[1]
-    return(np.pad(image, ((yu, yd), (xl, xr)), mode))
+    return np.pad(image, ((yu, yd), (xl, xr)), mode)
 
 ########
 # Print an image of integer pixels
@@ -103,7 +103,7 @@ def imgConvPad(img, kernel, verb=False):
         printImg(imRes)
         print('Imagem resultado depois de dividida')
         printImgFloat(imDiv)
-    return (imDiv)
+    return imDiv
 
 ########
 # Convolute a unpadded image with a kernel
@@ -139,7 +139,7 @@ def sepFilter(col, lin, img):
             kernel[y][x]=col[y] * lin[x]
 #    print('Kernel completo (a partir do separado)')
 #    printImgFloat(kernel)
-    return (imgConv(img, kernel))
+    return imgConv(img, kernel)
 
 ########
 # Calculate rotation source coordinates (angle in degrees)
@@ -165,7 +165,7 @@ def interp(a, b, off, verb=False):
     res = a + (b - a) * off
     if verb:
         print('Interpolating between', a,'and', b,'at',off,'=', res)
-    return (res)
+    return res
 
 ########
 # Bilinear interpolation
@@ -194,7 +194,7 @@ def bilinear(xorig, yorig, img, verb=False):
     vv1 = interp(v1, v2, xorig - x1,verb)
     vv2 = interp(v3, v4, xorig - x1,verb)
     res = interp(vv1, vv2, yorig - y1,verb)
-    return (int(round(res,0)))
+    return int(round(res,0))
 
 ########
 # Hybrid 5x5 median filter value for a pixel
@@ -235,7 +235,7 @@ def medianHibrid5x5(x, y, image,verb=False):
     print('mediana dos pixeis nas verticais', v2)
     print('pixel central', image[y][x])
     print('resultado final da mediana hibrida', res)
-    return (res)
+    return res
 
 ########
 # Histogram equalization
@@ -273,7 +273,7 @@ def eqHist(img,maxLevel,verb=False):
     if verb:
         print('Resulting image')
         printImg(imgRes)
-    return(imgRes)
+    return imgRes
 
 ########
 # Sums all the values in the all picture (number of pixels 1 on binary images)
@@ -282,7 +282,7 @@ def numBits(img):
     tot=0
     for l in img:
         tot +=sum(l)
-    return(tot)
+    return tot
 
 ########
 # Image dilation
@@ -308,7 +308,7 @@ def dilation(imIn,ker):
                 for j in range(-offX,offX+1):
                     if img[y+i][x+j]==1 and ker[i+1][j+1]==1:
                         imRes[y-offY][x-offX]=1
-    return(imRes)
+    return imRes
 
 ########
 # Image erosion
@@ -334,21 +334,30 @@ def erosion(imIn,ker):
                 for j in range(-offX,offX+1):
                     if img[y+i][x+j]==0 and ker[i+1][j+1]==1:
                         imRes[y-offY][x-offX]=0
-    return(imRes)
+    return imRes
 
 ########
 # Hit and Miss with pad (dont cares are represented as -1 on the kernel)
 ################
 def hitAndMiss(imIn,ker):
-    img=imagePadDup1(imIn)
-    imRes=[]
-    for y in range(1,len(img)-1):
-        imRes.append([])
-        for x in range(1,len(img[y])-1):
-            s=1
-            for i in range(-1,2):
-                for j in range(-1,2):
+    '''
+    Hit and Miss operation
+    :param imIn: input image
+    :param ker: kernel
+    :return: processed image
+    '''
+    (dkY, dkX) = ker.shape
+    offX=floor(dkX / 2)
+    offY=floor(dkY / 2)
+    img = imagePad(imIn,[offY,offY,offX,offX])
+    (dimY, dimX) = img.shape
+    imRes=np.empty_like(imIn)
+
+    for y in range(offY,dimY-offY):
+        for x in range(offX,dimX-offX):
+            imRes[y-offY][x-offX]=1
+            for i in range(-offY,offY+1):
+                for j in range(-offX,offX+1):
                     if ker[i+1][j+1]!=-1 and ker[i+1][j+1]!=img[y+i][x+j]:
-                        s=0
-            imRes[-1].append(s)
-    return(imRes)
+                        imRes[y-offY][x-offX]=0
+    return imRes

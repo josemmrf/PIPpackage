@@ -219,3 +219,8 @@ print(dilImage)
 erodImage=PIPpackage.erosion(binImage,kernel)
 print('Eroded image')
 print(erodImage)
+
+kernelHM = np.array([[-1, 0, -1], [-1, 0, -1], [-1, 0, 1]])
+hitMiss=PIPpackage.hitAndMiss(binImage,kernelHM)
+print('Hut and Miss image')
+print(hitMiss)
