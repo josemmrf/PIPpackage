@@ -187,8 +187,8 @@ import numpy as np
 # imD=PIPpackage.imagePad(im,[2,2,2,2],mode='wrap')
 # PIPpackage.printImg(imD)
 
-img=PIPpackage.genImage(7,7,8,10)
-PIPpackage.printImg(img)
+#img=PIPpackage.genImage(7,7,7,10)
+#PIPpackage.printImg(img)
 #kernel=np.array([[1,2,3],[4,5,6],[7,8,9]])
 #imRes=PIPpackage.imgConv(img,kernel)
 #PIPpackage.printImgFloat(imRes)
@@ -198,10 +198,21 @@ PIPpackage.printImg(img)
 # res=PIPpackage.bilinear(1.6, 2.8, img,True)
 #print('Bilinear interpolation result:', res)
 
-res=PIPpackage.medianHibrid5x5(4,5,img,True)
+# res=PIPpackage.medianHibrid5x5(4,5,img,True)
 
+#res=PIPpackage.eqHist(img,7,True)
+#print('Equalized image')
+#print(res)
 
 #import matplotlib.pyplot as pyplot
 #pyplot.imshow(img)
 #pyplot.show()
 #input("Press Enter to continue...")
+
+binImage=PIPpackage.genImage(6, 6, 1)
+print('Binary image')
+print(binImage)
+kernel = [[1, 1, 1], [0, 1, 0], [0, 0, 0]]
+dilImage=PIPpackage.dilation(binImage,kernel)
+print('Dilated image')
+print(dilImage)

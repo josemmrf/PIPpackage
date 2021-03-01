@@ -240,14 +240,12 @@ def medianHibrid5x5(x, y, image,verb=False):
 ########
 # Histogram equalization
 ################
-def eqHist(img,nLevels,verb):
-    hist={}
+def eqHist(img,maxLevel,verb=False):
+    hist={v:0 for v in range(maxLevel+1)}  # Initialize histogram with zero for all the levels
     tot=0
-    for i in range(nLevels):
-        hist[i]=0
-    for l in img:
-        for p in l:
-            hist[p]=hist[p]+1
+    for y in range(img.shape[0]):
+        for x in range(img.shape[1]):
+            hist[round(img[y][x],0)] = hist[round(img[y][x],0)]+1
             tot +=1
     if verb:
         print('Histogram',hist)
@@ -262,10 +260,10 @@ def eqHist(img,nLevels,verb):
         for i in range(len(accProb)):
             print("{:.3f}".format(accProb[i]),end='  ')
         print()
-    step=1/nLevels
+    step=1/(maxLevel+1)
     newLevels=accProb.copy()
     for i in range(len(newLevels)):
-        newLevels[i]=math.ceil(newLevels[i]/step)-1
+        newLevels[i]=ceil(newLevels[i]/step)-1
     if verb:
         print('Transformation table',newLevels)
     imgRes=deepcopy(img)
@@ -290,17 +288,22 @@ def numBits(img):
 # Image dilation
 ################
 def dilation(imIn,ker):
-    img=imagePadDup1(imIn)
-    imRes=[]
-    for y in range(1,len(img)-1):
-        imRes.append([])
-        for x in range(1,len(img[y])-1):
-            s=0
+    '''
+    Dilation of a binary image
+    :param imIn: binary image to dilate
+    :param ker: dilation kernel
+    :return: dilated image
+    '''
+    img=imagePad(imIn,[1,1,1,1])
+    imRes=np.empty_like(imIn)
+    (dimY,dimX)=img.shape
+    for y in range(1,dimY-1):
+        for x in range(1,dimX-1):
+            imRes[y-1][x-1]=0
             for i in range(-1,2):
                 for j in range(-1,2):
                     if img[y+i][x+j]==1 and ker[i+1][j+1]==1:
-                        s=1
-            imRes[-1].append(s)
+                        imRes[y-1][x-1]=1
     return(imRes)
 
 ########
