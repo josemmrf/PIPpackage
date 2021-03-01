@@ -3,6 +3,7 @@ from math import sin, cos
 from copy import deepcopy
 import random
 import numpy as np
+from math import floor
 
 # ADAPTED FUNCTIONS
 
@@ -48,7 +49,7 @@ def printImg(img):
     '''
     for l in img:
         for p in l:
-            print('{0:3d}'.format(p), end='')
+            print('{0:4d}'.format(p), end='')
         print()
 
 ########
@@ -66,56 +67,67 @@ def printImgFloat(img):
         print()
 
 # TO BE ADAPTED FUNCTIONS
+
 #######
-# Convolute a padded image with a 3x3 kernel
+# Convolute a padded image with a kernel
 ################
-def imgC3x3(img, ker):
-    tot = 0
-    for l in ker:
-        tot += sum(l)
+def imgConvPad(img, kernel, verb=False):
+    '''
+    imgConv - Calculates the convolution of an image with a kernel
+:param img: input image (NumPy array)
+    :param kernel: kernel (NumPy array)
+    :param verb: Verbose - True if messages are expected - default False
+    :return: convolved image (NumPy array)
+    '''
+    (dimY, dimX) = img.shape
+    (dkY, dkX) = kernel.shape
+    offX=floor(dkX / 2)
+    offY=floor(dkY / 2)
 
-    print('Valor da soma do filtro',tot)
+    imRes = np.empty([dimY-2*offY,dimX-2*offX],int)
 
-    imRes = []
-    for y in range(1, len(img) - 1):
-        imRes.append([])
-        for x in range(1, len(img[y]) - 1):
+    print(imRes.shape)
+    for y in range(offY, dimY-offY):
+        for x in range(offX, dimX-offX):
             s = 0
-            for i in range(-1, 2):
-                for j in range(-1, 2):
-                    s += img[y + i][x + j] * ker[i + 1][j + 1]
-            imRes[y - 1].append(s)
+            for i in range(-offY, offY+1):
+                for j in range(-offX, offX+1):
+                    s += img[y + i][x + j] * kernel[i + offY][j + offX]
+            imRes[y - offY][x-offX]=s
 
-    print('Imagem resultado antes da divisão')
-    printImg(imRes)
-    imDiv=[[v / tot for v in lin] for lin in imRes]
-    print('Imagem resultado depois de dividida')
-    printImgFloat(imDiv)
-    return ([[v / tot for v in lin] for lin in imRes])
+    imDiv=imRes / kernel.sum()
+
+    if verb:
+        print('Valor da soma do filtro', kernel.sum())
+        print('Imagem resultado antes da divisão')
+        printImg(imRes)
+        print('Imagem resultado depois de dividida')
+        printImgFloat(imDiv)
+    return (imDiv)
 
 ########
-# Convolute a unpadded image with a 3x3 kernel
+# Convolute a unpadded image with a kernel
 ################
-def imgConv3x3(img, ker):
-    imgPad = imagePadDup1(img)
-#    print('Imagem com duplicação de margens')
-#    printImg(imgPad)
-    imgRes = imgC3x3(imgPad, ker)
-    return (imgRes)
+def imgConv(img, kernel):
+    (dkX, dkY) = kernel.shape
+    offX=floor(dkX / 2)
+    offY=floor(dkY / 2)
+
+    imgPad = imagePad(img,[offY,offY,offX,offX])
+    return imgConvPad(imgPad, kernel)
 
 ########
 # Filter the image img with a separated kernel filter col x lin
 # Returns: floating point image with the scaled result
 ################
-def sepFilter3x3(col, lin, img):
-    ker = []
-    for y in range(3):
-        ker.append([])
-        for x in range(3):
-            ker[y].append(col[y] * lin[x])
+def sepFilter(col, lin, img):
+    kernel=np.empty([len(col),len(lin)])
+    for y in range(len(col)):
+        for x in range(len(lin)):
+            kernel[y][x]=col[y] * lin[x]
     print('Kernel completo (a partir do separado)')
-    printImg(ker)
-    return (imgConv3x3(img, ker))
+    printImgFloat(kernel)
+    return (imgConv(img, kernel))
 
 ########
 # Calculate rotation source coordinates (angle in degrees)

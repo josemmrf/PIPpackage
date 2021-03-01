@@ -1,4 +1,5 @@
 import PIPpackage
+import numpy as np
 #
 # #########
 # # Exame generation functions
@@ -180,8 +181,21 @@ import PIPpackage
 # mail = loginEmail('ssfctunl@gmail.com', 'Sensoriais2020')  # 'simfctunl@gmail.com', 'sim576911')
 # checkEmail(mail)
 
-im=PIPpackage.genImage(7,7,8)
-print(im)
-print()
-imD=PIPpackage.imagePad(im,[2,2,2,2],mode='wrap')
-PIPpackage.printImg(imD)
+# im=PIPpackage.genImage(7,7,8)
+# print(im)
+# print()
+# imD=PIPpackage.imagePad(im,[2,2,2,2],mode='wrap')
+# PIPpackage.printImg(imD)
+
+img=PIPpackage.genImage(7,7,8,10)
+kernel=np.array([[1,2,3],[4,5,6],[7,8,9]])
+imRes=PIPpackage.imgConv(img,kernel)
+PIPpackage.printImgFloat(imRes)
+
+imgRes=PIPpackage.sepFilter([1,2,1,1,1],[1,2,1],img)
+
+
+#import matplotlib.pyplot as pyplot
+#pyplot.imshow(img)
+#pyplot.show()
+#input("Press Enter to continue...")
