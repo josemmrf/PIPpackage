@@ -73,7 +73,7 @@ def printImgFloat(img):
 ################
 def imgConvPad(img, kernel, verb=False):
     '''
-    imgConv - Calculates the convolution of an image with a kernel
+    Calculates the convolution of an image with a kernel. The image must come with padding already
 :param img: input image (NumPy array)
     :param kernel: kernel (NumPy array)
     :param verb: Verbose - True if messages are expected - default False
@@ -109,10 +109,15 @@ def imgConvPad(img, kernel, verb=False):
 # Convolute a unpadded image with a kernel
 ################
 def imgConv(img, kernel):
+    '''
+    Does the padding (edge mode) and convolutes the image with a kernel
+    :param img: input image without padding
+    :param kernel: kernel to be used (any dimension)
+    :return: convoluted image
+    '''
     (dkX, dkY) = kernel.shape
     offX=floor(dkX / 2)
     offY=floor(dkY / 2)
-
     imgPad = imagePad(img,[offY,offY,offX,offX])
     return imgConvPad(imgPad, kernel)
 
@@ -121,6 +126,13 @@ def imgConv(img, kernel):
 # Returns: floating point image with the scaled result
 ################
 def sepFilter(col, lin, img):
+    '''
+    Performs a convolutional filter specified on separated form
+    :param col: filter column (any ODD dimension)
+    :param lin: filter line (any ODD dimension)
+    :param img: image to be filtered
+    :return: filtered image
+    '''
     kernel=np.empty([len(col),len(lin)])
     for y in range(len(col)):
         for x in range(len(lin)):
