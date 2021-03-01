@@ -3,7 +3,7 @@ from math import sin, cos
 from copy import deepcopy
 import random
 import numpy as np
-from math import floor
+from math import floor, ceil
 
 # ADAPTED FUNCTIONS
 
@@ -153,28 +153,47 @@ def calcRotCoord(x, y, ang):
 ########
 # Linear interpolation
 ################
-def interp(a, b, off):
+def interp(a, b, off, verb=False):
+    '''
+    Linear interpolation
+    :param a: First value
+    :param b: Second alue
+    :param off: Offset between first and second value
+    :param verb: True if messages are expected
+    :return: exact interpolation value (not rounded)
+    '''
     res = a + (b - a) * off
-    print('interpolating between', a, b,'at',off,'=', res)
+    if verb:
+        print('Interpolating between', a,'and', b,'at',off,'=', res)
     return (res)
 
 ########
 # Bilinear interpolation
 ################
-def bilinear(xorig, yorig, img):
-    print('bilinear to find', xorig, yorig)
+def bilinear(xorig, yorig, img, verb=False):
+    '''
+    Bilinear interpolation
+    :param xorig: X coordinate
+    :param yorig: Y coordinate
+    :param img: Image to interpolate
+    :param verb: True if messages are expected
+    :return: rounded value of resulting bilinear interpolation
+    '''
+    if verb:
+        print('Bilinear to find', xorig, yorig)
     x1 = floor(xorig)
     x2 = ceil(xorig)
     y1 = floor(yorig)
     y2 = ceil(yorig)
-#    print(x1,x2,y1,y2,img)
     v1 = img[y1][x1]
     v2 = img[y1][x2]
     v3 = img[y2][x1]
     v4 = img[y2][x2]
-    vv1 = interp(v1, v2, xorig - x1)
-    vv2 = interp(v3, v4, xorig - x1)
-    res = interp(vv1, vv2, yorig - y1)
+    if verb:
+        print('Values to consider:',v1,v2,v3,v4)
+    vv1 = interp(v1, v2, xorig - x1,verb)
+    vv2 = interp(v3, v4, xorig - x1,verb)
+    res = interp(vv1, vv2, yorig - y1,verb)
     return (int(round(res,0)))
 
 ########

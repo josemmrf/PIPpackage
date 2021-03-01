@@ -188,13 +188,15 @@ import numpy as np
 # PIPpackage.printImg(imD)
 
 img=PIPpackage.genImage(7,7,8,10)
-kernel=np.array([[1,2,3],[4,5,6],[7,8,9]])
-imRes=PIPpackage.imgConv(img,kernel)
-PIPpackage.printImgFloat(imRes)
+PIPpackage.printImg(img)
+#kernel=np.array([[1,2,3],[4,5,6],[7,8,9]])
+#imRes=PIPpackage.imgConv(img,kernel)
+#PIPpackage.printImgFloat(imRes)
 
-imgRes=PIPpackage.sepFilter([1,2,1,1,1],[1,2,1],img)
+#imgRes=PIPpackage.sepFilter([1,2,1,1,1],[1,2,1],img)
 
-
+res=PIPpackage.bilinear(1.6, 2.8, img,True)
+print('Bilinear interpolation result:', res)
 #import matplotlib.pyplot as pyplot
 #pyplot.imshow(img)
 #pyplot.show()
