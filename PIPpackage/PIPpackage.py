@@ -294,33 +294,46 @@ def dilation(imIn,ker):
     :param ker: dilation kernel
     :return: dilated image
     '''
-    img=imagePad(imIn,[1,1,1,1])
+    (dkY, dkX) = ker.shape
+    offX=floor(dkX / 2)
+    offY=floor(dkY / 2)
+    img = imagePad(imIn,[offY,offY,offX,offX])
+    (dimY, dimX) = img.shape
     imRes=np.empty_like(imIn)
-    (dimY,dimX)=img.shape
-    for y in range(1,dimY-1):
-        for x in range(1,dimX-1):
-            imRes[y-1][x-1]=0
-            for i in range(-1,2):
-                for j in range(-1,2):
+
+    for y in range(offY,dimY-offY):
+        for x in range(offX,dimX-offX):
+            imRes[y-offY][x-offX]=0
+            for i in range(-offY,offY+1):
+                for j in range(-offX,offX+1):
                     if img[y+i][x+j]==1 and ker[i+1][j+1]==1:
-                        imRes[y-1][x-1]=1
+                        imRes[y-offY][x-offX]=1
     return(imRes)
 
 ########
 # Image erosion
 ################
 def erosion(imIn,ker):
-    img=imagePadDup1(imIn)
-    imRes=[]
-    for y in range(1,len(img)-1):
-        imRes.append([])
-        for x in range(1,len(img[y])-1):
-            s=1
-            for i in range(-1,2):
-                for j in range(-1,2):
+    '''
+    Erodes a binary image with the binary kernel ker
+    :param imIn:
+    :param ker:
+    :return:
+    '''
+    (dkY, dkX) = ker.shape
+    offX=floor(dkX / 2)
+    offY=floor(dkY / 2)
+    img = imagePad(imIn,[offY,offY,offX,offX])
+    (dimY, dimX) = img.shape
+    imRes=np.empty_like(imIn)
+
+    for y in range(offY,dimY-offY):
+        for x in range(offX,dimX-offX):
+            imRes[y-offY][x-offX]=1
+            for i in range(-offY,offY+1):
+                for j in range(-offX,offX+1):
                     if img[y+i][x+j]==0 and ker[i+1][j+1]==1:
-                        s=0
-            imRes[-1].append(s)
+                        imRes[y-offY][x-offX]=0
     return(imRes)
 
 ########
