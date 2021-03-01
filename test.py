@@ -212,7 +212,10 @@ import numpy as np
 binImage=PIPpackage.genImage(6, 6, 1)
 print('Binary image')
 print(binImage)
-kernel = [[1, 1, 1], [0, 1, 0], [0, 0, 0]]
+kernel = np.array([[1, 1, 1], [0, 1, 0], [0, 0, 0]])
 dilImage=PIPpackage.dilation(binImage,kernel)
 print('Dilated image')
 print(dilImage)
+erodImage=PIPpackage.erosion(binImage,kernel)
+print('Eroded image')
+print(erodImage)
