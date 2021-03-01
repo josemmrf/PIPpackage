@@ -86,7 +86,7 @@ def imgConvPad(img, kernel, verb=False):
 
     imRes = np.empty([dimY-2*offY,dimX-2*offX],int)
 
-    print(imRes.shape)
+#    print(imRes.shape)
     for y in range(offY, dimY-offY):
         for x in range(offX, dimX-offX):
             s = 0
@@ -137,8 +137,8 @@ def sepFilter(col, lin, img):
     for y in range(len(col)):
         for x in range(len(lin)):
             kernel[y][x]=col[y] * lin[x]
-    print('Kernel completo (a partir do separado)')
-    printImgFloat(kernel)
+#    print('Kernel completo (a partir do separado)')
+#    printImgFloat(kernel)
     return (imgConv(img, kernel))
 
 ########
