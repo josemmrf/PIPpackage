@@ -241,6 +241,13 @@ def medianHibrid5x5(x, y, image,verb=False):
 # Histogram equalization
 ################
 def eqHist(img,maxLevel,verb=False):
+    '''
+    Histogram equalization
+    :param img: image to equalize
+    :param maxLevel: maximum level of gray
+    :param verb: True if messages are expected
+    :return: equalized image
+    '''
     hist={v:0 for v in range(maxLevel+1)}  # Initialize histogram with zero for all the levels
     tot=0
     for y in range(img.shape[0]):
@@ -279,10 +286,12 @@ def eqHist(img,maxLevel,verb=False):
 # Sums all the values in the all picture (number of pixels 1 on binary images)
 ################
 def numBits(img):
-    tot=0
-    for l in img:
-        tot +=sum(l)
-    return tot
+    '''
+    Number of bits
+    :param img: input BINARY image
+    :return: number of pixels = 1 in the image
+    '''
+    return img.sum()
 
 ########
 # Image dilation

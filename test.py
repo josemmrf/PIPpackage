@@ -200,27 +200,28 @@ import numpy as np
 
 # res=PIPpackage.medianHibrid5x5(4,5,img,True)
 
-#res=PIPpackage.eqHist(img,7,True)
-#print('Equalized image')
-#print(res)
+img=PIPpackage.genImage(7,7,7,10)
+res=PIPpackage.eqHist(img,7,True)
+print('Equalized image')
+print(res)
 
 #import matplotlib.pyplot as pyplot
 #pyplot.imshow(img)
 #pyplot.show()
 #input("Press Enter to continue...")
-
-binImage=PIPpackage.genImage(6, 6, 1)
-print('Binary image')
-print(binImage)
-kernel = np.array([[1, 1, 1], [0, 1, 0], [0, 0, 0]])
-dilImage=PIPpackage.dilation(binImage,kernel)
-print('Dilated image')
-print(dilImage)
-erodImage=PIPpackage.erosion(binImage,kernel)
-print('Eroded image')
-print(erodImage)
-
-kernelHM = np.array([[-1, 0, -1], [-1, 0, -1], [-1, 0, 1]])
-hitMiss=PIPpackage.hitAndMiss(binImage,kernelHM)
-print('Hut and Miss image')
-print(hitMiss)
+#
+# binImage=PIPpackage.genImage(6, 6, 1)
+# print('Binary image')
+# print(binImage)
+# kernel = np.array([[1, 1, 1], [0, 1, 0], [0, 0, 0]])
+# dilImage=PIPpackage.dilation(binImage,kernel)
+# print('Dilated image')
+# print(dilImage)
+# erodImage=PIPpackage.erosion(binImage,kernel)
+# print('Eroded image')
+# print(erodImage)
+#
+# kernelHM = np.array([[-1, 0, -1], [-1, 0, -1], [-1, 0, 1]])
+# hitMiss=PIPpackage.hitAndMiss(binImage,kernelHM)
+# print('Hut and Miss image')
+# print(hitMiss)
