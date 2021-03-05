@@ -373,6 +373,9 @@ def hitAndMiss(imIn,ker):
                         imRes[y-offY][x-offX]=0
     return imRes
 
+########
+# Multi class image segmentation
+################
 def multiSeg(img, verb=False):
     '''
     Segmentation of multiclass images - inspired on the classic algorithm
@@ -465,6 +468,9 @@ def multiSeg(img, verb=False):
 
     return(labels,nextLabel-off)
 
+########
+# Binary image segmentation
+################
 def binSeg(img, verb=False):
     '''
     Binaru segmentation - classic algorithm
