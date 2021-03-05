@@ -356,6 +356,7 @@ def hitAndMiss(imIn,ker):
     :param ker: kernel
     :return: processed image
     '''
+
     (dkY, dkX) = ker.shape
     offX=floor(dkX / 2)
     offY=floor(dkY / 2)
@@ -380,6 +381,25 @@ def multiSeg(img, verb=False):
     :return: labelled image with a different label for each object and the number of labels on the resulting image
              The result will have labels from 0 sequentially to the number of labels-1
     '''
+
+    def insertConf(cTab, l1, l2):
+        for i in range(len(cTab)):
+            if l1 in cTab[i] and l2 in cTab[i]:
+                return (cTab)  # Label already registered
+            elif l1 in cTab[i]:
+                cTab[i].append(l2)
+                return (cTab)
+            elif l2 in cTab[i]:
+                cTab[i].append(l1)
+                return (cTab)
+        cTab.append([l1, l2])
+        return (cTab)
+
+    def labEq(lab, confTab):
+        for i in range(len(confTab)):
+            if lab in confTab[i]:
+                return (min(confTab[i]))
+        return (lab)
 
     (height,width)=img.shape
     labels=np.empty_like(img,int)
@@ -444,3 +464,103 @@ def multiSeg(img, verb=False):
         print(labels)
 
     return(labels,nextLabel-off)
+
+def binSeg(img, verb=False):
+    '''
+    Binaru segmentation
+    :param img: binary image to segment
+    :param verb: True if messages are expected
+    :return: segmented image and number of labels (between 1 and N)
+    '''
+    def insertConf(cTab, l1, l2):
+        for i in range(len(cTab)):
+            if l1 in cTab[i] and l2 in cTab[i]:
+                return (cTab)  # Label already registered
+            elif l1 in cTab[i]:
+                cTab[i].append(l2)
+                return (cTab)
+            elif l2 in cTab[i]:
+                cTab[i].append(l1)
+                return (cTab)
+        cTab.append([l1, l2])
+        return (cTab)
+
+    def labEq(lab, confTab):
+        for i in range(len(confTab)):
+            if lab in confTab[i]:
+                return (min(confTab[i]))
+        return (lab)
+
+    if verb:
+        print('Input image')
+        print(img)
+
+    (height, width) = img.shape
+
+    # Labels between 1 and N
+    nextLabel = 1
+    if img[0][0] == 1:
+        img[0][0] = nextLabel  # First pixel
+        nextLabel += 1
+    for x in range(1, width):  # First row
+        if img[0][x] == 1:
+            if img[0][x - 1] != 0:
+                img[0][x] = img[0][x - 1]
+            else:
+                img[0][x] = nextLabel
+                nextLabel += 1
+
+    confTab = []
+
+    for y in range(1, height):  # Remaining rows
+        if img[y][0] == 1:
+            if img[y - 1][0] != 0:  # First column
+                img[y][0] = img[y - 1][0]
+            else:
+                img[y][0] = nextLabel
+                nextLabel += 1
+        else:
+            img[y][0] = nextLabel
+            nextLabel += 1
+        for x in range(1, width):  # Remaining columns
+            if img[y][x] == 1:
+                if img[y - 1][x] != 0:
+                    img[y][x] = img[y - 1][x]
+                    if img[y][x - 1] != 0 and img[y][x - 1] != img[y][x]:
+                        print('Conflito', img[y][x - 1], img[y][x])
+                        confTab = insertConf(confTab, img[y][x - 1], img[y][x])
+                elif img[y][x - 1] != 0:
+                    img[y][x] = img[y][x - 1]
+                else:
+                    img[y][x] = nextLabel
+                    nextLabel += 1
+    if verb:
+        print('Labels before equivalencies')
+        print(img)
+
+    labDict = {0: 0}
+    off = 0
+    for l in range(1, nextLabel + 1):
+        le = labEq(l, confTab)
+        if l != le:
+            labDict[l] = labDict[le]
+            off += 1
+        else:
+            labDict[l] = l - off
+    if verb:
+        print('Conflit table')
+        print(confTab)
+        print('Number of labels before equivalencies:', nextLabel)
+        print('Dictionary')
+        print(labDict)
+        print('Number of labels after equivalencies:', nextLabel - off - 1)
+
+    for y in range(0, height):
+        for x in range(0, width):
+            img[y][x] = labDict[img[y][x]]
+
+    if verb:
+        print('Labels after equivalencies')
+        print(img)
+
+    return (img, nextLabel - off - 1)
