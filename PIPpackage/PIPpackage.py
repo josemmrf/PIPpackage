@@ -375,7 +375,7 @@ def hitAndMiss(imIn,ker):
 
 def multiSeg(img, verb=False):
     '''
-    Segmentation of multiclass images
+    Segmentation of multiclass images - inspired on the classic algorithm
     :param img: input image with any number of labels
     :param verb: True if messages are expected
     :return: labelled image with a different label for each object and the number of labels on the resulting image
@@ -467,7 +467,7 @@ def multiSeg(img, verb=False):
 
 def binSeg(img, verb=False):
     '''
-    Binaru segmentation
+    Binaru segmentation - classic algorithm
     :param img: binary image to segment
     :param verb: True if messages are expected
     :return: segmented image and number of labels (between 1 and N)
