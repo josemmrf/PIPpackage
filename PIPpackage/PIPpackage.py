@@ -11,7 +11,8 @@ from math import floor, ceil
 # GenImage - generates an numpy array with a random image
 ################
 def genImage(dimX,dimY,max,seed=0):
-    ''' Generates a numpy array with dimX by dimY pixels of type int
+    '''
+    Generates a numpy array with dimX by dimY pixels of type int
     - returns the array filled with values between zero and max
     '''
     if seed!=0:
@@ -370,3 +371,76 @@ def hitAndMiss(imIn,ker):
                     if ker[i+1][j+1]!=-1 and ker[i+1][j+1]!=img[y+i][x+j]:
                         imRes[y-offY][x-offX]=0
     return imRes
+
+def multiSeg(img, verb=False):
+    '''
+    Segmentation of multiclass images
+    :param img: input image with any number of labels
+    :param verb: True if messages are expected
+    :return: labelled image with a different label for each object and the number of labels on the resulting image
+             The result will have labels from 0 sequentially to the number of labels-1
+    '''
+
+    (height,width)=img.shape
+    labels=np.empty_like(img,int)
+
+    # Initial pass - place first lables
+
+    nextLabel=0
+    labels[0][0]=nextLabel   # First pixel
+    nextLabel +=1
+    for x in range(1,width):     # First row
+        if img[0][x]==img[0][x-1]:
+            labels[0][x]=labels[0][x-1]
+        else:
+            labels[0][x]=nextLabel
+            nextLabel += 1
+
+    confTab=[]
+
+    for y in range(1,height):    # Remaining rows
+        if img[y][0]==img[y-1][0]:  # First column
+            labels[y][0]=labels[y-1][0]
+        else:
+            labels[y][0]=nextLabel
+            nextLabel += 1
+        for x in range(1,width):        # Remaining columns
+            if img[y][x]==img[y-1][x]:
+                labels[y][x]=labels[y-1][x]
+                if img[y][x]==img[y][x-1] and labels[y][x]!=labels[y][x-1]:
+                    confTab=insertConf(confTab,labels[y][x-1],labels[y][x])
+            elif img[y][x]==img[y][x-1]:
+                labels[y][x]=labels[y][x-1]
+            else:
+                labels[y][x]=nextLabel
+                nextLabel += 1
+    labDict={}
+    off=0
+    for l in range(nextLabel):
+        le=labEq(l,confTab)
+        if l!=le:
+            labDict[l]=labDict[le]
+            off +=1
+        else:
+            labDict[l]=l-off
+    if verb:
+        print('Input image')
+        print(img)
+        print('Labels before equivalencies')
+        print(labels)
+        print('Conflit table')
+        print(confTab)
+        print('Number of labels before equivalencies:',nextLabel)
+        print('Dictionary')
+        print(labDict)
+        print('Number of labels after equivalencies:',nextLabel-off)
+
+    for y in range(0,height):
+        for x in range(0,width):
+            labels[y][x]=labDict[labels[y][x]]
+
+    if verb:
+        print('Labels after equivalencies')
+        print(labels)
+
+    return(labels,nextLabel-off)

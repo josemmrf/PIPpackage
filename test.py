@@ -2,7 +2,7 @@ import PIPpackage
 import numpy as np
 #
 # #########
-# # Exame generation functions
+# # Exam generation functions
 # #################
 #
 # def getTxt(vals,images):
