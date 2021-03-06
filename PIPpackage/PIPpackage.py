@@ -393,14 +393,11 @@ def multiSeg(img, verb=False):
         return ([], -1)
 
     def insertConf(cTab, l1, l2):
-        print('Inserting:', l1, l2)
         for i in range(len(cTab)):
             if l1 in cTab[i] and l2 in cTab[i]:
-                print('Label already registered')
                 return (cTab)  # Label already registered
             elif l1 in cTab[i]:
                 (eq, n) = getEqs(cTab, l2)
-                print('Receiving (1)', eq, n)
                 if n == -1:
                     cTab[i].append(l2)
                 else:
@@ -410,7 +407,6 @@ def multiSeg(img, verb=False):
                 return (cTab)
             elif l2 in cTab[i]:
                 (eq, n) = getEqs(cTab, l1)
-                print('Receiving (2)', eq, n)
                 if n == -1:
                     cTab[i].append(l1)
                 else:
@@ -419,7 +415,6 @@ def multiSeg(img, verb=False):
                         del (cTab[n])
                 return (cTab)
         cTab.append([l1, l2])
-        print('Appending', l1, l2)
         return (cTab)
 
     def labEq(lab, confTab):
@@ -500,15 +495,33 @@ def binSeg(img, verb=False):
     :param verb: True if messages are expected
     :return: segmented image and number of labels (between 1 and N)
     '''
+    def getEqs(cTab,lab):
+        for i in range(len(cTab)):
+            if lab in cTab[i]:
+                return(cTab[i],i)
+        return([],-1)
+
     def insertConf(cTab, l1, l2):
         for i in range(len(cTab)):
             if l1 in cTab[i] and l2 in cTab[i]:
                 return (cTab)  # Label already registered
             elif l1 in cTab[i]:
-                cTab[i].append(l2)
+                (eq,n)=getEqs(cTab,l2)
+                if n==-1:
+                    cTab[i].append(l2)
+                else:
+                    cTab[i] += eq
+                    if i!=n:
+                        del(cTab[n])
                 return (cTab)
             elif l2 in cTab[i]:
-                cTab[i].append(l1)
+                (eq,n)=getEqs(cTab,l1)
+                if n==-1:
+                    cTab[i].append(l1)
+                else:
+                    cTab[i] += eq
+                    if i!=n:
+                        del(cTab[n])
                 return (cTab)
         cTab.append([l1, l2])
         return (cTab)
@@ -547,15 +560,11 @@ def binSeg(img, verb=False):
             else:
                 img[y][0] = nextLabel
                 nextLabel += 1
-        else:
-            img[y][0] = nextLabel
-            nextLabel += 1
         for x in range(1, width):  # Remaining columns
             if img[y][x] == 1:
                 if img[y - 1][x] != 0:
                     img[y][x] = img[y - 1][x]
                     if img[y][x - 1] != 0 and img[y][x - 1] != img[y][x]:
-                        print('Conflito', img[y][x - 1], img[y][x])
                         confTab = insertConf(confTab, img[y][x - 1], img[y][x])
                 elif img[y][x - 1] != 0:
                     img[y][x] = img[y][x - 1]
