@@ -200,7 +200,7 @@ def bilinear(xorig, yorig, img, verb=False):
 ########
 # Hybrid 5x5 median filter value for a pixel
 ################
-def medianHibrid5x5(x, y, image,verb=False):
+def medianHybrid5x5(x, y, image,verb=False):
     '''
     Hybrid median filter
     :param x: X coordinate
