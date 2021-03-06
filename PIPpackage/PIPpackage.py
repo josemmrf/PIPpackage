@@ -373,6 +373,7 @@ def hitAndMiss(imIn,ker):
                         imRes[y-offY][x-offX]=0
     return imRes
 
+
 ########
 # Multi class image segmentation
 ################
@@ -385,17 +386,40 @@ def multiSeg(img, verb=False):
              The result will have labels from 0 sequentially to the number of labels-1
     '''
 
+    def getEqs(cTab, lab):
+        for i in range(len(cTab)):
+            if lab in cTab[i]:
+                return (cTab[i], i)
+        return ([], -1)
+
     def insertConf(cTab, l1, l2):
+        print('Inserting:', l1, l2)
         for i in range(len(cTab)):
             if l1 in cTab[i] and l2 in cTab[i]:
+                print('Label already registered')
                 return (cTab)  # Label already registered
             elif l1 in cTab[i]:
-                cTab[i].append(l2)
+                (eq, n) = getEqs(cTab, l2)
+                print('Receiving (1)', eq, n)
+                if n == -1:
+                    cTab[i].append(l2)
+                else:
+                    cTab[i] += eq
+                    if i != n:
+                        del (cTab[n])
                 return (cTab)
             elif l2 in cTab[i]:
-                cTab[i].append(l1)
+                (eq, n) = getEqs(cTab, l1)
+                print('Receiving (2)', eq, n)
+                if n == -1:
+                    cTab[i].append(l1)
+                else:
+                    cTab[i] += eq
+                    if i != n:
+                        del (cTab[n])
                 return (cTab)
         cTab.append([l1, l2])
+        print('Appending', l1, l2)
         return (cTab)
 
     def labEq(lab, confTab):
@@ -404,48 +428,46 @@ def multiSeg(img, verb=False):
                 return (min(confTab[i]))
         return (lab)
 
-    (height,width)=img.shape
-    labels=np.empty_like(img,int)
+    (height, width) = img.shape
+    labels = np.empty_like(img, int)
 
-    # Initial pass - place first lables
-
-    nextLabel=0
-    labels[0][0]=nextLabel   # First pixel
-    nextLabel +=1
-    for x in range(1,width):     # First row
-        if img[0][x]==img[0][x-1]:
-            labels[0][x]=labels[0][x-1]
+    nextLabel = 0
+    labels[0][0] = nextLabel  # First pixel
+    nextLabel += 1
+    for x in range(1, width):  # First row
+        if img[0][x] == img[0][x - 1]:
+            labels[0][x] = labels[0][x - 1]
         else:
-            labels[0][x]=nextLabel
+            labels[0][x] = nextLabel
             nextLabel += 1
 
-    confTab=[]
+    confTab = []
 
-    for y in range(1,height):    # Remaining rows
-        if img[y][0]==img[y-1][0]:  # First column
-            labels[y][0]=labels[y-1][0]
+    for y in range(1, height):  # Remaining rows
+        if img[y][0] == img[y - 1][0]:  # First column
+            labels[y][0] = labels[y - 1][0]
         else:
-            labels[y][0]=nextLabel
+            labels[y][0] = nextLabel
             nextLabel += 1
-        for x in range(1,width):        # Remaining columns
-            if img[y][x]==img[y-1][x]:
-                labels[y][x]=labels[y-1][x]
-                if img[y][x]==img[y][x-1] and labels[y][x]!=labels[y][x-1]:
-                    confTab=insertConf(confTab,labels[y][x-1],labels[y][x])
-            elif img[y][x]==img[y][x-1]:
-                labels[y][x]=labels[y][x-1]
+        for x in range(1, width):  # Remaining columns
+            if img[y][x] == img[y - 1][x]:
+                labels[y][x] = labels[y - 1][x]
+                if img[y][x] == img[y][x - 1] and labels[y][x] != labels[y][x - 1]:
+                    confTab = insertConf(confTab, labels[y][x - 1], labels[y][x])
+            elif img[y][x] == img[y][x - 1]:
+                labels[y][x] = labels[y][x - 1]
             else:
-                labels[y][x]=nextLabel
+                labels[y][x] = nextLabel
                 nextLabel += 1
-    labDict={}
-    off=0
+    labDict = {}
+    off = 0
     for l in range(nextLabel):
-        le=labEq(l,confTab)
-        if l!=le:
-            labDict[l]=labDict[le]
-            off +=1
+        le = labEq(l, confTab)
+        if l != le:
+            labDict[l] = labDict[le]
+            off += 1
         else:
-            labDict[l]=l-off
+            labDict[l] = l - off
     if verb:
         print('Input image')
         print(img)
@@ -453,20 +475,20 @@ def multiSeg(img, verb=False):
         print(labels)
         print('Conflit table')
         print(confTab)
-        print('Number of labels before equivalencies:',nextLabel)
+        print('Number of labels before equivalencies:', nextLabel)
         print('Dictionary')
         print(labDict)
-        print('Number of labels after equivalencies:',nextLabel-off)
+        print('Number of labels after equivalencies:', nextLabel - off)
 
-    for y in range(0,height):
-        for x in range(0,width):
-            labels[y][x]=labDict[labels[y][x]]
+    for y in range(0, height):
+        for x in range(0, width):
+            labels[y][x] = labDict[labels[y][x]]
 
     if verb:
         print('Labels after equivalencies')
         print(labels)
 
-    return(labels,nextLabel-off)
+    return (labels, nextLabel - off)
 
 ########
 # Binary image segmentation
