@@ -9,7 +9,7 @@ But some algorithms are quite slower than others...
 
 Enjoy and contribute if you feel that you want.
 
-###Available functions
+##Available functions
 
 **genImage** - generates an image
 
