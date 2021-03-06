@@ -12,8 +12,11 @@ Enjoy and contribute if you feel that you want.
 ###Available functions
 
 **genImage** - generates an image
+
 **imagePad** - image padding
+
 **printImg** - prints the pixels values of an image
+
 **printImgFloat** - same as above for floating point pixels
 **imgConv** - image convolution with a kernel
 **sepFilter** - image filtering with a separable filter
