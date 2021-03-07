@@ -386,36 +386,26 @@ def multiSeg(img, verb=False):
              The result will have labels from 0 sequentially to the number of labels-1
     '''
 
-    def getEqs(cTab, lab):
+    def getEqs(cTab,lab):
         for i in range(len(cTab)):
             if lab in cTab[i]:
-                return (cTab[i], i)
-        return ([], -1)
+                return(i)
+        return(-1)
 
     def insertConf(cTab, l1, l2):
-        for i in range(len(cTab)):
-            if l1 in cTab[i] and l2 in cTab[i]:
-                return (cTab)  # Label already registered
-            elif l1 in cTab[i]:
-                (eq, n) = getEqs(cTab, l2)
-                if n == -1:
-                    cTab[i].append(l2)
-                else:
-                    cTab[i] += eq
-                    if i != n:
-                        del (cTab[n])
-                return (cTab)
-            elif l2 in cTab[i]:
-                (eq, n) = getEqs(cTab, l1)
-                if n == -1:
-                    cTab[i].append(l1)
-                else:
-                    cTab[i] += eq
-                    if i != n:
-                        del (cTab[n])
-                return (cTab)
-        cTab.append([l1, l2])
-        return (cTab)
+        id1=getEqs(cTab,l1)
+        id2=getEqs(cTab,l2)
+        if id1 == -1 and id2 != -1:
+            cTab[id2].append(l1)
+        elif id1 != -1 and id2 == -1:
+            cTab[id1].append(l2)
+        elif id1 == -1 and id2 == -1:
+            cTab.append([l1, l2])
+        else:
+            if id1 != id2:
+                cTab[id1] += cTab[id2]
+                del(cTab[id2])
+        return(cTab)
 
     def labEq(lab, confTab):
         for i in range(len(confTab)):
@@ -495,36 +485,27 @@ def binSeg(img, verb=False):
     :param verb: True if messages are expected
     :return: segmented image and number of labels (between 1 and N)
     '''
+
     def getEqs(cTab,lab):
         for i in range(len(cTab)):
             if lab in cTab[i]:
-                return(cTab[i],i)
-        return([],-1)
+                return(i)
+        return(-1)
 
     def insertConf(cTab, l1, l2):
-        for i in range(len(cTab)):
-            if l1 in cTab[i] and l2 in cTab[i]:
-                return (cTab)  # Label already registered
-            elif l1 in cTab[i]:
-                (eq,n)=getEqs(cTab,l2)
-                if n==-1:
-                    cTab[i].append(l2)
-                else:
-                    cTab[i] += eq
-                    if i!=n:
-                        del(cTab[n])
-                return (cTab)
-            elif l2 in cTab[i]:
-                (eq,n)=getEqs(cTab,l1)
-                if n==-1:
-                    cTab[i].append(l1)
-                else:
-                    cTab[i] += eq
-                    if i!=n:
-                        del(cTab[n])
-                return (cTab)
-        cTab.append([l1, l2])
-        return (cTab)
+        id1=getEqs(cTab,l1)
+        id2=getEqs(cTab,l2)
+        if id1==-1 and id2!=-1:
+            cTab[id2].append(l1)
+        elif id1!=-1 and id2==-1:
+            cTab[id1].append(l2)
+        elif id1==-1 and id2==-1:
+            cTab.append([l1, l2])
+        else:
+            if id1!=id2:
+                cTab[id1] += cTab[id2]
+                del(cTab[id2])
+        return(cTab)
 
     def labEq(lab, confTab):
         for i in range(len(confTab)):
