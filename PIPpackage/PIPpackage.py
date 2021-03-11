@@ -546,6 +546,8 @@ def binSeg(img, verb=False):
                 if img[y - 1][x] != 0:
                     img[y][x] = img[y - 1][x]
                     if img[y][x - 1] != 0 and img[y][x - 1] != img[y][x]:
+                        if verb:
+                            print('Conflict:',img[y][x - 1],img[y][x])
                         confTab = insertConf(confTab, img[y][x - 1], img[y][x])
                 elif img[y][x - 1] != 0:
                     img[y][x] = img[y][x - 1]
@@ -558,7 +560,7 @@ def binSeg(img, verb=False):
 
     labDict = {0: 0}
     off = 0
-    for l in range(1, nextLabel + 1):
+    for l in range(1, nextLabel):
         le = labEq(l, confTab)
         if l != le:
             labDict[l] = labDict[le]
