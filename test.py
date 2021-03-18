@@ -80,7 +80,7 @@ img=np.array([[1,1,1,1,2,2,2,2,2,2,2,1,1,1,1],
                [1,1,1,1,1,1,6,6,6,7,7,7,5,5,5],
                [1,1,1,1,1,1,1,1,7,7,7,7,6,6,6]])
 
-labels,numLabels=PIPpackage.multiSeg(img,True)
+labels,numLabels=PIPpackage.multiSeg(img,False)
 print(numLabels)
 print(labels)
 
