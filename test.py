@@ -1,5 +1,5 @@
 import PIPpackage
-import numpy as np
+#import numpy as np
 
 # #######
 # # MAIN PROGRAM
@@ -19,8 +19,11 @@ import numpy as np
 # imD=PIPpackage.imagePad(im,[2,2,2,2],mode='wrap')
 # PIPpackage.printImg(imD)
 
-#img=PIPpackage.genImage(7,7,7,10)
-#PIPpackage.printImg(img)
+img = PIPpackage.genImage(7, 7, 7, 10)
+PIPpackage.printImg(img)
+print('Bilinear: ', PIPpackage.bilinear(3.3, 2.9, img))
+print('Bicubic: ', PIPpackage.PIPpackage.bicubic(3.3, 2.9, img))
+
 #kernel=np.array([[1,2,3],[4,5,6],[7,8,9]])
 #imRes=PIPpackage.imgConv(img,kernel)
 #PIPpackage.printImgFloat(imRes)
@@ -32,10 +35,10 @@ import numpy as np
 
 # res=PIPpackage.medianHibrid5x5(4,5,img,True)
 
-img=PIPpackage.genImage(7,7,7,10)
-res=PIPpackage.eqHist(img,7)
-print('Equalized image')
-print(res)
+# img=PIPpackage.genImage(7,7,7,10)
+# res=PIPpackage.eqHist(img,7)
+# print('Equalized image')
+# print(res)
 
 #import matplotlib.pyplot as pyplot
 #pyplot.imshow(img)
@@ -71,16 +74,15 @@ print(res)
 # print(numLabels)
 # print(labels)
 
-img=np.array([[1,1,1,1,2,2,2,2,2,2,2,1,1,1,1],
-               [1,1,1,2,2,3,3,3,3,3,2,1,3,1,5],
-               [1,1,4,4,3,3,3,1,1,2,2,1,3,1,1],
-               [5,1,4,4,4,1,1,1,1,2,2,2,2,1,1],
-               [5,1,1,4,1,2,2,1,2,1,1,1,1,1,1],
-               [5,5,5,5,1,6,5,5,6,4,4,4,5,5,1],
-               [1,1,1,1,1,1,6,6,6,7,7,7,5,5,5],
-               [1,1,1,1,1,1,1,1,7,7,7,7,6,6,6]])
-
-labels,numLabels=PIPpackage.multiSeg(img,False)
-print(numLabels)
-print(labels)
-
+# img=np.array([[1,1,1,1,2,2,2,2,2,2,2,1,1,1,1],
+#                [1,1,1,2,2,3,3,3,3,3,2,1,3,1,5],
+#                [1,1,4,4,3,3,3,1,1,2,2,1,3,1,1],
+#                [5,1,4,4,4,1,1,1,1,2,2,2,2,1,1],
+#                [5,1,1,4,1,2,2,1,2,1,1,1,1,1,1],
+#                [5,5,5,5,1,6,5,5,6,4,4,4,5,5,1],
+#                [1,1,1,1,1,1,6,6,6,7,7,7,5,5,5],
+#                [1,1,1,1,1,1,1,1,7,7,7,7,6,6,6]])
+#
+# labels,numLabels=PIPpackage.multiSeg(img,False)
+# print(numLabels)
+# print(labels)
