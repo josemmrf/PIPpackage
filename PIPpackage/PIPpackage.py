@@ -200,7 +200,7 @@ def bilinear(xorig, yorig, img, verb=False):
 ########
 # Bicubic interpolation Aux
 ################
-def bicubic_aux(v1, v2, v3, v4, off, verb=False):
+def bicubic_aux(values, off, verb=False):
     '''
     Bilcubic interpolation Auxiliary Function
     :param v1: Fist value
@@ -212,9 +212,10 @@ def bicubic_aux(v1, v2, v3, v4, off, verb=False):
     :return: result of interpolated values
     '''
 
-    res = v2 + off*(0.5*v3-0.5*v1) + np.power(off, 2)*(-0.5*v4+2*v3-2.5*v2+v1) + np.power(off, 3)*(0.5*v4-1.5*v3+1.5*v2-0.5*v1)
+    res = values[1] + off*(0.5*values[2]-0.5*values[0]) + np.power(off, 2)*(-0.5*values[3]+2*values[2]-2.5*values[1]
+            + values[0]) + np.power(off, 3)*(0.5*values[3]-1.5*values[2]+1.5*values[1]-0.5*values[0])
     if verb:
-        print('Interpolating between', v1, v2, v3, 'and', v4,'at',off,'=', res)
+        print('Interpolating between', values[0], values[1], values[2], 'and', values[3],'at',off,'=', res)
     return res
 
 ########
@@ -234,33 +235,22 @@ def bicubic(xorig, yorig, img, verb=False):
 
     x1 = floor(xorig)
     y1 = floor(yorig)
-    v1 = img[y1-1][x1-1]
-    v2 = img[y1-1][x1]
-    v3 = img[y1-1][x1+1]
-    v4 = img[y1-1][x1+2]
-    v5 = img[y1][x1-1]
-    v6 = img[y1][x1]
-    v7 = img[y1][x1+1]
-    v8 = img[y1][x1+2]
-    v9 = img[y1+1][x1-1]
-    v10 = img[y1+1][x1]
-    v11 = img[y1+1][x1+1]
-    v12 = img[y1+1][x1+2]
-    v13 = img[y1+2][x1-1]
-    v14 = img[y1+2][x1]
-    v15 = img[y1+2][x1+1]
-    v16 = img[y1+2][x1+2]
 
+    listoff = [[-1, -1], [-1, 0], [-1, 1], [-1, 2], [0, -1], [0, 0], [0, 1], [0, 2], [1, -1], [1, 0], [1, 1], [1, 2],
+               [2, -1], [2, 0], [2, 1], [2, 2]]
+
+    values = [img[y1+off[0]][x1+off[1]] for off in listoff]
+    vvs = [0, 0, 0, 0]
     if verb:
-        print('Values to consider:',v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16)
+        print('Values to consider:', values)
 
-    vv1 = bicubic_aux(v1, v2, v3, v4, xorig - x1,verb)
-    vv2 = bicubic_aux(v5, v6, v7, v8, xorig - x1,verb)
-    vv3 = bicubic_aux(v9, v10, v11, v12, xorig - x1, verb)
-    vv4 = bicubic_aux(v13, v14, v15, v16, xorig - x1, verb)
-    res = bicubic_aux(vv1, vv2, vv3, vv4, yorig - y1, verb)
+    vvs[0] = bicubic_aux(values[0:4], xorig - x1, verb)
+    vvs[1] = bicubic_aux(values[4:8], xorig - x1, verb)
+    vvs[2] = bicubic_aux(values[8:12], xorig - x1, verb)
+    vvs[3] = bicubic_aux(values[12:16], xorig - x1, verb)
+    res = bicubic_aux(vvs[0:4], yorig - y1, verb)
 
-    return int(round(res,0))
+    return int(round(res, 0))
 
 ########
 # Hybrid 5x5 median filter value for a pixel
