@@ -19,10 +19,19 @@ import PIPpackage
 # imD=PIPpackage.imagePad(im,[2,2,2,2],mode='wrap')
 # PIPpackage.printImg(imD)
 
-img = PIPpackage.genImage(10, 10, 7, 10)
+#######################################
+img = PIPpackage.genImage(4, 4, 10, 10)
 PIPpackage.printImg(img)
-print('Bilinear: ', PIPpackage.bilinear(5.5, 4.5, img))
-print('Bicubic: ', PIPpackage.PIPpackage.bicubic(5.5, 4.5, img))
+# print('Bilinear: ', PIPpackage.bilinear(5.5, 4.5, img))
+# print('Bicubic: ', PIPpackage.PIPpackage.bicubic(5.5, 4.5, img))
+
+# print('Result', PIPpackage.PIPpackage.sorting([5,4,8,2,7,1,6], 'D'))
+
+# print('Result: ', PIPpackage.PIPpackage.medianFilter3x3(img, True))
+img = PIPpackage.imagePad(img, [2, 2, 2, 2])
+PIPpackage.printImg(img)
+print('Result: ', PIPpackage.PIPpackage.meanFilterA(img, 5, 5, True))
+#######################################
 
 #kernel=np.array([[1,2,3],[4,5,6],[7,8,9]])
 #imRes=PIPpackage.imgConv(img,kernel)
